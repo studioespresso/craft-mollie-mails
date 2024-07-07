@@ -13,8 +13,10 @@ This plugin is meant as a starter for adding email notifications when you are us
 
 ## Installation instructions
 
-### As a local plugin
-If you've received this plugin as a zip file, follow these steps to add it to your project.
+Download the plugin/repository from GitHub so you have the zip archive on your computer.
+
+> [!IMPORTANT]  
+> This plugin is intended to installed as a local plugin **only**.
 
 - Create a `plugins` folder in the root of your project (that's where your templates, config and vendor folders are located)
 - Unzip the plugin and place it in the `plugins` folder
@@ -36,4 +38,5 @@ If you've received this plugin as a zip file, follow these steps to add it to yo
 - Now you can install the plugin through the control panel.
 
 ## Usage
+
 
