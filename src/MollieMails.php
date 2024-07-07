@@ -47,14 +47,16 @@ class MollieMails extends Plugin
             MolliePayments::EVENT_AFTER_TRANSACTION_UPDATE,
             function (TransactionUpdateEvent $event) {
                 if (get_class($event->element) === Subscription::class) {
-
                     //Example admin email:
-                    $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element);
+                    // $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element);
                     // Email user email:
-                    $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element);
+                    // $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element);
 
                 } elseif (get_class($event->element) === Payment::class) {
-                    $this->sendEmail('inf@mydomain.com', 'new subscription created', '', $event->element);
+                    //Example admin email:
+                    // $this->sendEmail('inf@mydomain.com', 'new payment', 'path/to/your/template', $event->element);
+                    // Email user email:
+                    // $this->sendEmail($event->element->email, 'Thanks for your purchase', 'path/to/your/template', $event->element);                }
                 }
             }
         );
@@ -63,7 +65,6 @@ class MollieMails extends Plugin
     private function sendEmail(string $recipient, string $subject, string $template, Element $element)
     {
         try {
-
             $message = new Message();
             $message->setSubject($subject);
             $message->setTo($recipient);
