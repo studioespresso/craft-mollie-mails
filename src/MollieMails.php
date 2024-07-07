@@ -6,6 +6,7 @@ use Craft;
 use craft\base\Element;
 use craft\base\Plugin;
 use craft\mail\Message;
+use craft\web\View;
 use studioespresso\molliepayments\elements\Payment;
 use studioespresso\molliepayments\elements\Subscription;
 use studioespresso\molliepayments\events\TransactionUpdateEvent;
@@ -68,7 +69,7 @@ class MollieMails extends Plugin
             $message = new Message();
             $message->setSubject($subject);
             $message->setTo($recipient);
-            $message->setHtmlBody(Craft::$app->getView()->renderTemplate($template, ['element' => $element]));
+            $message->setHtmlBody(Craft::$app->getView()->renderTemplate($template, ['element' => $element], View::TEMPLATE_MODE_SITE));
             Craft::$app->getMailer()->send($message);
         } catch (\Throwable $e) {
             Craft::error($e->getMessage(), 'mollie-mails');
