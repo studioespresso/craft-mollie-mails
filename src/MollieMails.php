@@ -7,6 +7,7 @@ use craft\base\Element;
 use craft\base\Plugin;
 use craft\mail\Message;
 use craft\web\View;
+use Mollie\Api\Types\PaymentStatus;
 use studioespresso\molliepayments\elements\Payment;
 use studioespresso\molliepayments\elements\Subscription;
 use studioespresso\molliepayments\events\TransactionUpdateEvent;
@@ -48,16 +49,29 @@ class MollieMails extends Plugin
             MolliePayments::EVENT_AFTER_TRANSACTION_UPDATE,
             function (TransactionUpdateEvent $event) {
                 if (get_class($event->element) === Subscription::class) {
-                    //Example admin email:
-                    // $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element);
-                    // Email user email:
-                    // $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element);
+                    if (in_array($event->transaction->status, [PaymentStatus::STATUS_PAID, PaymentStatus::STATUS_AUTHORIZED])) {
+
+                        //Example admin email:
+                        // $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element);
+                        // Email user email:
+                        // $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element);
+                    }
+
+                    if (in_array($event->transaction->status, [PaymentStatus::STATUS_FAILED, PaymentStatus::STATUS_CANCELED, PaymentStatus::STATUS_EXPIRED])) {
+
+                    }
 
                 } elseif (get_class($event->element) === Payment::class) {
-                    //Example admin email:
-                    // $this->sendEmail('inf@mydomain.com', 'new payment', 'path/to/your/template', $event->element);
-                    // Email user email:
-                    // $this->sendEmail($event->element->email, 'Thanks for your purchase', 'path/to/your/template', $event->element);                }
+                    if (in_array($event->transaction->status, [PaymentStatus::STATUS_PAID, PaymentStatus::STATUS_AUTHORIZED])) {
+                        //Example admin email:
+                        // $this->sendEmail('inf@mydomain.com', 'new payment', 'path/to/your/template', $event->element);
+                        // Email user email:
+                        // $this->sendEmail($event->element->email, 'Thanks for your purchase', 'path/to/your/template', $event->element);
+                    }
+
+                    if (in_array($event->transaction->status, [PaymentStatus::STATUS_FAILED, PaymentStatus::STATUS_CANCELED, PaymentStatus::STATUS_EXPIRED])) {
+
+                    }
                 }
             }
         );
