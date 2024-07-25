@@ -52,9 +52,9 @@ class MollieMails extends Plugin
                     if (in_array($event->transaction->status, [PaymentStatus::STATUS_PAID, PaymentStatus::STATUS_AUTHORIZED])) {
 
                         //Example admin email:
-                        // $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element);
+//                         $this->sendEmail('inf@mydomain.com', 'new subscription created', 'path/to/your/template', $event->element, $event->transaction);
                         // Email user email:
-                        // $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element);
+                        // $this->sendEmail($event->element->email, 'Thanks for subscribing', 'path/to/your/template', $event->element, $event->transaction);
                     }
 
                     if (in_array($event->transaction->status, [PaymentStatus::STATUS_FAILED, PaymentStatus::STATUS_CANCELED, PaymentStatus::STATUS_EXPIRED])) {
@@ -64,9 +64,9 @@ class MollieMails extends Plugin
                 } elseif (get_class($event->element) === Payment::class) {
                     if (in_array($event->transaction->status, [PaymentStatus::STATUS_PAID, PaymentStatus::STATUS_AUTHORIZED])) {
                         //Example admin email:
-                        // $this->sendEmail('inf@mydomain.com', 'new payment', 'path/to/your/template', $event->element);
+                        // $this->sendEmail('inf@mydomain.com', 'new payment', 'path/to/your/template', $event->element, $event->transaction);
                         // Email user email:
-                        // $this->sendEmail($event->element->email, 'Thanks for your purchase', 'path/to/your/template', $event->element);
+                        // $this->sendEmail($event->element->email, 'Thanks for your purchase', 'path/to/your/template', $event->element, $event->transaction);
                     }
 
                     if (in_array($event->transaction->status, [PaymentStatus::STATUS_FAILED, PaymentStatus::STATUS_CANCELED, PaymentStatus::STATUS_EXPIRED])) {
@@ -77,13 +77,13 @@ class MollieMails extends Plugin
         );
     }
 
-    private function sendEmail(string $recipient, string $subject, string $template, Element $element)
+    private function sendEmail(string $recipient, string $subject, string $template, Element $element, $transaction)
     {
         try {
             $message = new Message();
             $message->setSubject($subject);
             $message->setTo($recipient);
-            $message->setHtmlBody(Craft::$app->getView()->renderTemplate($template, ['element' => $element], View::TEMPLATE_MODE_SITE));
+            $message->setHtmlBody(Craft::$app->getView()->renderTemplate($template, ['element' => $element, 'transaction' => $transaction], View::TEMPLATE_MODE_SITE));
             Craft::$app->getMailer()->send($message);
         } catch (\Throwable $e) {
             Craft::error($e->getMessage(), 'mollie-mails');
